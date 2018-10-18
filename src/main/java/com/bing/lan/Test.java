@@ -20,7 +20,7 @@ import java.util.stream.Stream;
 public class Test {
 
     public static void main(String[] args) {
-        CollectorsTest.toListTest();
+        CollectorsTest.collectorTest();
     }
 
     private static void test2() {

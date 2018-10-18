@@ -2,11 +2,14 @@ package com.bing.lan;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.BinaryOperator;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
@@ -18,7 +21,7 @@ import java.util.stream.Stream;
 
 public class CollectorsTest {
 
-    public static void toListTest() {
+    public static void collectorTest() {
         Stream<Integer> integerStream = Stream.of(1, 2, 3, 4);
 
         Collector<Integer, ?, List<Integer>> collector = Collectors.toList();
@@ -41,6 +44,58 @@ public class CollectorsTest {
         // 打印结果
         // collectMaxBy:4
 
+        Predicate<Integer> predicate = it -> it % 2 == 0;
+        Collector<Integer, ?, Map<Boolean, List<Integer>>> mapCollector = Collectors.partitioningBy(predicate);
+
+        Map<Boolean, List<Integer>> collectPartitioningBy = Stream.of(1, 2, 3, 4)
+                .collect(mapCollector);
+
+        System.out.println("collectPartitioningBy : " + collectPartitioningBy);
+        // 打印结果
+        // collectPartitioningBy : {false=[1, 3], true=[2, 4]}
+
+        Map<Boolean, List<Integer>> collectGroup = Stream.of(1, 2, 3, 4)
+                .collect(Collectors.groupingBy(it -> it > 3));
+
+        System.out.println("collectGroup : " + collectGroup);
+        // 打印结果
+        // collectGroup : {false=[1, 2, 3], true=[4]}
+
+        ArrayList<Integer> list = new ArrayList<>();
+        list.add(1);
+        list.add(2);
+        list.add(3);
+        list.add(4);
+
+        StringBuilder sb = new StringBuilder();
+
+        for (Integer it : list) {
+            if (sb.length() > 0) {
+                sb.append(",");
+            }
+            sb.append(it);
+        }
+        System.out.println(sb.toString());
+        // 打印结果
+        // 1,2,3,4
+
+        String strJoin = Stream.of("1", "2", "3", "4")
+                .collect(Collectors.joining(",", "[", "]"));
+        System.out.println("strJoin: " + strJoin);
+        // 打印结果
+        // strJoin: [1,2,3,4]
+
+        // 分割数据块
+        Map<Boolean, List<Integer>> collectParti = Stream.of(1, 2, 3, 4)
+                .collect(Collectors.partitioningBy(it -> it % 2 == 0));
+
+        Map<Boolean, Integer> mapSize = new HashMap<>();
+        collectParti.entrySet()
+                .forEach(entry -> mapSize.put(entry.getKey(), entry.getValue().size()));
+
+        System.out.println("mapSize : " + mapSize);
+        // 打印结果
+        // mapSize : {false=2, true=2}
     }
 
     public static <T> Collector<T, ?, List<T>> toList() {
