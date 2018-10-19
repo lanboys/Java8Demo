@@ -21,6 +21,30 @@ import java.util.stream.Stream;
 
 public class CollectorsTest {
 
+    public static void groupingByTest() {
+        Map<Boolean, List<Integer>> collectGroup = Stream.of(1, 2, 3, 4)
+                .collect(Collectors.groupingBy(it -> it > 3));
+        System.out.println("collectGroup : " + collectGroup);
+        // 打印结果
+        // collectGroup : {false=[1, 2, 3], true=[4]}
+
+        Student stuA = new Student(1, "A", "M", 184);
+        Student stuB = new Student(2, "B", "G", 163);
+        Student stuC = new Student(3, "B", "M", 175);
+        Student stuD = new Student(4, "D", "G", 158);
+        Student stuE = new Student(5, "A", "M", 170);
+        List<Student> list = new ArrayList<>();
+        list.add(stuA);
+        list.add(stuB);
+        list.add(stuC);
+        list.add(stuD);
+        list.add(stuE);
+
+        Map<String, List<Student>> collect = list.stream().collect(Collectors.groupingBy(o -> o.getName()));
+        System.out.println("collect : " + collectGroup);
+
+    }
+
     public static void collectorTest() {
         Stream<Integer> integerStream = Stream.of(1, 2, 3, 4);
 
@@ -53,13 +77,6 @@ public class CollectorsTest {
         System.out.println("collectPartitioningBy : " + collectPartitioningBy);
         // 打印结果
         // collectPartitioningBy : {false=[1, 3], true=[2, 4]}
-
-        Map<Boolean, List<Integer>> collectGroup = Stream.of(1, 2, 3, 4)
-                .collect(Collectors.groupingBy(it -> it > 3));
-
-        System.out.println("collectGroup : " + collectGroup);
-        // 打印结果
-        // collectGroup : {false=[1, 2, 3], true=[4]}
 
         ArrayList<Integer> list = new ArrayList<>();
         list.add(1);
